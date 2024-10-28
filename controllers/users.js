@@ -13,7 +13,7 @@ router.post('/signup', async (req,res) => {
         if (regUser) {
             return res.json({error: 'Username in use '});
         }
-        const hashedPassword = bcrypt.hashSync(password, SALT_LENGTH);1
+        const hashedPassword = bcrypt.hashSync(password, SALT_LENGTH);
         const user = await User.create({username, hashedPassword, admin});
         const token = jwt.sign({username: user.username, _id: user._id}, process.env.JWT_SECRET);
         res.status(201).json({user,token});
@@ -25,7 +25,7 @@ router.post('/signup', async (req,res) => {
 router.post('/signin', async (req, res) => {
     try {
         const {username, password} = req.body;
-        const user = await User.findOne({username, password});
+        const user = await User.findOne({username});
         if(user && bcrypt.compareSync(password, user.hashedPassword)) {
             const token = jwt.sign({username: user.username, _id: user._id}, process.env.JWT_SECRET);
             res.status(200).json({ token });
