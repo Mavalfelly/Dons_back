@@ -2,7 +2,18 @@ const express = require('express');
 const verify = require('../middleware/verify')
 const Foods = require('../models/food');
 const router = express.Router();
+// const admin = require('../middleware/isAdmin')
+const Sug = require('../models/sugs');
 
+
+function isAdmin(req, res, next) {
+    console.log(req.user)
+    if (req.user && req.user.admin === true) { 
+        next();
+    } else {
+        res.status(403).json({ error: 'Forbidden: Requires admin access' });
+    }
+};
 
 //unsigned routing
 router.get('/', async (req,res) => {
@@ -14,16 +25,31 @@ router.get('/', async (req,res) => {
     }
 });
 
-router.post('/', async (req,res) => {
+
+router.use(verify)
+
+router.post('/suggestions', async (req,res) => {
     try {
-        const {name, price, ingredients, foodImg, description} = req.body
-        const newItem = await Foods.create({name, price, ingredients, foodImg, description});
-        res.status(201).json(newItem)
+        const {sugName, sugIngredients, sugDetails, subBy } = req.body
+        const suggestedItem = await Sug.create({sugName, sugIngredients, sugDetails, subBy })
+        res.status(201).json(suggestedItem)
     } catch (error) {
         res.status(500).json(error)
     }
-    
-});
+})
+
+router.get('/suggestions', async (req,res) =>{
+    try {
+        const recomendations = await Sug.find({});
+        res.status(200).json(recomendations);
+        
+    } catch (error) {
+        res.status(500).json(error)
+    }
+})
+
+
+router.use(isAdmin)
 
 router.get('/:itemId', async (req,res) => {
     try {
@@ -51,5 +77,16 @@ router.delete('/:itemId', async (req,res) => {
     } catch (error) {
         res.status(500).json(error);
     }
-})
+});
+
+router.post('/', async (req,res) => {
+    try {
+        const {name, price, ingredients, foodImg, description} = req.body
+        const newItem = await Foods.create({name, price, ingredients, foodImg, description});
+        res.status(201).json(newItem)
+    } catch (error) {
+        res.status(500).json(error)
+    }
+    
+});
 module.exports = router

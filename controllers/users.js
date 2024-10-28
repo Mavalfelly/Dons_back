@@ -28,7 +28,9 @@ router.post('/signin', async (req, res) => {
         const {username, password} = req.body;
         const user = await User.findOne({username});
         if(user && bcrypt.compareSync(password, user.hashedPassword)) {
-            const token = jwt.sign({username: user.username, _id: user._id}, process.env.JWT_SECRET);
+            console.log(user)
+            const token = jwt.sign({username: user.username, _id: user._id, admin: user.admin}, process.env.JWT_SECRET);
+            console.log(token)
             res.status(200).json({ token });
         }else {
             res.status(401).json({ error: 'Invalid username or password.' });
