@@ -1,6 +1,7 @@
 const express = require('express');
 const verify = require('../middleware/verify')
 const Menu = require('../models/menu');
+const multer = require('multer');
 const router = express.Router();
 // const admin = require('../middleware/isAdmin')
 const Sug = require('../models/sugs');
@@ -51,7 +52,7 @@ router.get('/suggestions', async (req,res) =>{
 
 router.use(isAdmin)
 
-router.get('/:itemId', async (req,res) => {
+router.get('/:menuId', async (req,res) => {
     try {
         const item = await Menu.findById(req.params.itemId)
         res.status(200).json(item);
@@ -60,7 +61,7 @@ router.get('/:itemId', async (req,res) => {
     }
 });
 
-router.put('/:itemId', async (req,res) => {
+router.put('/:menuId', async (req,res) => {
     try {
         const {name, price, ingredients, foodImg, description} = req.body
         const updatedItem = await Menu.findByIdAndUpdate(req.params.itemId, {name, price, ingredients, foodImg, description}, {new: true})
@@ -70,7 +71,7 @@ router.put('/:itemId', async (req,res) => {
     }
 });
 
-router.delete('/:itemId', async (req,res) => {
+router.delete('/:menuId', async (req,res) => {
     try {
         const removedItem = await Menu.findByIdAndDelete(req.params.itemId)
         res.status(200).json(removedItem)
@@ -79,14 +80,31 @@ router.delete('/:itemId', async (req,res) => {
     }
 });
 
-router.post('/', async (req,res) => {
+const storage = multer.memoryStorage(); // or specify disk storage options
+const upload = multer({ storage });
+
+
+router.post('/', upload.single('foodImg'), async (req, res) => {
     try {
-        const {name, price, ingredients, foodImg, description} = req.body
-        const newItem = await Menu.create({name, price, ingredients, foodImg, description});
-        res.status(201).json(newItem)
+        const { name, price, ingredients, description } = req.body;
+        const foodImg = req.file; // This will contain the uploaded file data
+
+        // Process the image file as needed (e.g., upload to cloud storage) and save the URL/path
+        // Here we assume `foodImg` is directly stored; adjust as necessary for your storage solution
+
+        const newItem = await Menu.create({
+            name,
+            price,
+            ingredients,
+            foodImg: req.file ? req.file.path : "", // Use appropriate file handling
+            description
+        });
+
+        res.status(201).json(newItem);
     } catch (error) {
-        res.status(500).json(error)
+        console.error("Error creating menu item:", error);
+        res.status(500).json({ message: "Error creating menu item", error });
     }
-    
 });
-module.exports = router
+
+module.exports = router;
