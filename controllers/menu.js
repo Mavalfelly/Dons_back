@@ -1,6 +1,6 @@
 const express = require('express');
 const verify = require('../middleware/verify')
-const Foods = require('../models/food');
+const Menu = require('../models/menu');
 const router = express.Router();
 // const admin = require('../middleware/isAdmin')
 const Sug = require('../models/sugs');
@@ -18,8 +18,8 @@ function isAdmin(req, res, next) {
 //unsigned routing
 router.get('/', async (req,res) => {
     try {
-        const foodList = await Foods.find({})
-        res.status(200).json(foodList)
+        const menuList = await Menu.find({})
+        res.status(200).json(menuList)
     } catch (error) {
         res.status(500).json(error)
     }
@@ -53,7 +53,7 @@ router.use(isAdmin)
 
 router.get('/:itemId', async (req,res) => {
     try {
-        const item = await Foods.findById(req.params.itemId)
+        const item = await Menu.findById(req.params.itemId)
         res.status(200).json(item);
     } catch (error) {
         res.status(500).json(error);   
@@ -63,7 +63,7 @@ router.get('/:itemId', async (req,res) => {
 router.put('/:itemId', async (req,res) => {
     try {
         const {name, price, ingredients, foodImg, description} = req.body
-        const updatedItem = await Foods.findByIdAndUpdate(req.params.itemId, {name, price, ingredients, foodImg, description}, {new: true})
+        const updatedItem = await Menu.findByIdAndUpdate(req.params.itemId, {name, price, ingredients, foodImg, description}, {new: true})
         res.status(200).json(updatedItem)
     } catch (error) {
         res.status(500).json(error);
@@ -72,7 +72,7 @@ router.put('/:itemId', async (req,res) => {
 
 router.delete('/:itemId', async (req,res) => {
     try {
-        const removedItem = await Foods.findByIdAndDelete(req.params.itemId)
+        const removedItem = await Menu.findByIdAndDelete(req.params.itemId)
         res.status(200).json(removedItem)
     } catch (error) {
         res.status(500).json(error);
@@ -82,7 +82,7 @@ router.delete('/:itemId', async (req,res) => {
 router.post('/', async (req,res) => {
     try {
         const {name, price, ingredients, foodImg, description} = req.body
-        const newItem = await Foods.create({name, price, ingredients, foodImg, description});
+        const newItem = await Menu.create({name, price, ingredients, foodImg, description});
         res.status(201).json(newItem)
     } catch (error) {
         res.status(500).json(error)
