@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
 const menuSchema = new mongoose.Schema({
+    dishType:{
+        type: String,
+        enum: ['Main', 'Appetizer', 'Dessert', 'Side', 'Drink'],
+        required: true,
+    },
     name:{
         type: String,
         required: true,

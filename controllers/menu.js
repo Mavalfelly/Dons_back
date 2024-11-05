@@ -116,7 +116,9 @@ router.delete('/:menuId', async (req,res) => {
 
 router.post('/', upload.single('foodImg'), async (req, res) => {
     try {
-        const { name, price, ingredients, description } = req.body;
+
+        console.log("Received request body:", req.body);
+        const { name, price, ingredients, description, dishType} = req.body;
         
         let foodImgUrl = req.file ? `/uploads/${req.file.filename}` : ""
 
@@ -125,7 +127,8 @@ router.post('/', upload.single('foodImg'), async (req, res) => {
             price: price,              
             ingredients: ingredients,   
             foodImg: foodImgUrl,        
-            description: description    
+            description: description,
+            dishType: dishType   
         });
 
         res.status(201).json(newItem);
