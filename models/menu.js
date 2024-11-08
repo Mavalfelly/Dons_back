@@ -4,8 +4,8 @@ const menuSchema = new mongoose.Schema({
     dishType:{
         type: String,
         enum: [
-            "Main", "Appetizer", "Dessert", "Side", "Drink", "Cocktail", "Sake", 
-            "IMPORTED BEER", "House Wine", "DOMESTIC BEER", "SPARKLING WINE", 
+            "MAIN", "APPETIZER", "DESSERT", "SIDE", "DRINK", "COCKTAIL", "SAKE", 
+            "IMPORTED BEER", "HOUSE WINE", "DOMESTIC BEER", "SPARKLING WINE", 
             "WHITE WINE", "RED WINE", "FRIED RICE", "VIETNAMESE RICE PLATTERS", 
             "ENTREES", "NOODLES", "BANH MI", "V-BOWLS VERMICELLI", 
             "PHO NOODLE SOUPS", "SOUPS & SALADS", "CATERING"
@@ -26,7 +26,6 @@ const menuSchema = new mongoose.Schema({
     },
     foodImg:{
         type: String,
-        required: false,
     },
     description:{
         type: String,

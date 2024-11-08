@@ -85,11 +85,12 @@ router.get('/:menuId', async (req,res) => {
 
 router.put('/:menuId', upload.single('foodImg'), async (req, res) => {
     try {
-        const { name, price, ingredients, description } = req.body;
+        const { type, name, price, ingredients, description } = req.body;
 
         let foodImgUrl = req.file ? `/uploads/${req.file.filename}` : undefined; // Only update if file exists
 
         const updateData = {
+            type: type,
             name,
             price,
             ingredients,
@@ -118,11 +119,12 @@ router.post('/', upload.single('foodImg'), async (req, res) => {
     try {
 
         console.log("Received request body:", req.body);
-        const { name, price, ingredients, description, dishType} = req.body;
+        const { type, name, price, ingredients, description, dishType} = req.body;
         
         let foodImgUrl = req.file ? `/uploads/${req.file.filename}` : ""
 
         const newItem = await Menu.create({
+            type: type,
             name: name,                
             price: price,              
             ingredients: ingredients,   
