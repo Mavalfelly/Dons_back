@@ -4,7 +4,7 @@ const menuSchema = new mongoose.Schema({
     dishType:{
         type: String,
         enum: [
-            "MAIN", "APPETIZER", "DESSERT", "SIDE", "DRINK", "COCKTAIL", "SAKE", 
+            "APPETIZER", "DESSERT", "DRINK", "COCKTAIL", "SAKE", 
             "IMPORTED BEER", "HOUSE WINE", "DOMESTIC BEER", "SPARKLING WINE", 
             "WHITE WINE", "RED WINE", "FRIED RICE", "VIETNAMESE RICE PLATTERS", 
             "ENTREES", "NOODLES", "BANH MI", "V-BOWLS VERMICELLI", 
