@@ -3,7 +3,6 @@ dotenv.config();
 const morgan = require('morgan')
 const cors = require('cors');
 const express = require('express');
-const path = require('path'); 
 const app = express();
 const mongoose = require('mongoose');
 const menuRouter = require('./controllers/menu')
