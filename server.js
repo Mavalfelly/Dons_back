@@ -21,7 +21,7 @@ app.use(express.static(path.join(__dirname, 'client', 'build')));
 app.use(morgan('tiny'));
 app.use('/uploads', express.static('uploads'));
 app.use('/menus', menuRouter)
-app.use('/', userRouter)
+app.use('/user', userRouter)
 
 app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
